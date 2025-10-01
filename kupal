@@ -1,0 +1,14 @@
+public class Main {
+	public static void main(String[] args) {
+		String name= ("APILADO MARK LOUIE");
+		int age=17;
+		System.out.println("APILADO MARK LOUIE");
+		System.out.println("Age of"+age);
+		String subject_1 = "Java Programming";
+		
+		System.out.println("Java Programming");
+		
+		String teacher= ("Sir Lawrence");
+		System.out.println("Java Programming Teacher " +"Sir Lawrence");
+	}
+} 
