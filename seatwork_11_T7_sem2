@@ -1,0 +1,70 @@
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Scanner;
+import java.awt.Toolkit;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        // JAVA ALARM CLOCK
+
+        Scanner scanner = new Scanner(System.in);
+
+        DateTimeFormatter formatter =
+                DateTimeFormatter.ofPattern("HH:mm:ss");
+
+        LocalTime alarmTime = null;
+
+        while (alarmTime == null) {
+            try {
+                System.out.print("Enter an alarm time (HH:mm:ss): ");
+                String inputTime = scanner.nextLine();
+
+                alarmTime = LocalTime.parse(inputTime, formatter);
+                System.out.println("Alarm set for " + alarmTime);
+
+            } catch (DateTimeParseException e) {
+                System.out.println("Invalid format. Please use HH:mm:ss");
+            }
+        }
+
+        AlarmClock alarmClock = new AlarmClock(alarmTime);
+        Thread alarmThread = new Thread(alarmClock);
+        alarmThread.start();
+
+        scanner.close();
+    }
+}
+
+class AlarmClock implements Runnable {
+
+    private LocalTime alarmTime;
+
+    public AlarmClock(LocalTime alarmTime) {
+        this.alarmTime = alarmTime;
+    }
+
+    @Override
+    public void run() {
+        while (true) {
+            LocalTime now = LocalTime.now();
+
+            if (now.getHour() == alarmTime.getHour()
+                    && now.getMinute() == alarmTime.getMinute()
+                    && now.getSecond() == alarmTime.getSecond()) {
+
+                Toolkit.getDefaultToolkit().beep();
+                System.out.println("⏰ ALARM!");
+                break;
+            }
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                System.out.println("Thread interrupted");
+            }
+        }
+    }
+}
