@@ -1,0 +1,121 @@
+import java.util.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        // words stored inside program (mobile safe)
+        String[] words = {
+                "java", "school", "computer", "hangman",
+                "science", "keyboard", "mouse", "phone"
+        };
+
+        Random random = new Random();
+        String word = words[random.nextInt(words.length)];
+
+        Scanner scanner = new Scanner(System.in);
+
+        ArrayList<Character> wordState = new ArrayList<>();
+        HashSet<Character> used = new HashSet<>();
+
+        int wrongGuesses = 0;
+
+        // create blanks
+        for (int i = 0; i < word.length(); i++) {
+            wordState.add('_');
+        }
+
+        System.out.println("JAVA HANGMAN");
+
+        while (wrongGuesses < 6) {
+
+            System.out.println(getHangmanArt(wrongGuesses));
+
+            // show current word
+            System.out.print("Word: ");
+            for (char c : wordState) {
+                System.out.print(c + " ");
+            }
+            System.out.println();
+
+            System.out.print("Guess a letter: ");
+            String input = scanner.next().toLowerCase();
+
+            // validate
+            if (input.length() != 1 || !Character.isLetter(input.charAt(0))) {
+                System.out.println("Enter ONE letter only.");
+                continue;
+            }
+
+            char guess = input.charAt(0);
+
+            // already guessed
+            if (used.contains(guess)) {
+                System.out.println("Already guessed.");
+                continue;
+            }
+
+            used.add(guess);
+
+            boolean found = false;
+
+            // check letters
+            for (int i = 0; i < word.length(); i++) {
+                if (word.charAt(i) == guess) {
+                    wordState.set(i, guess);
+                    found = true;
+                }
+            }
+
+            if (!found) {
+                wrongGuesses++;
+                System.out.println("Wrong guess.");
+            }
+
+            // win check
+            if (!wordState.contains('_')) {
+                System.out.println("YOU WIN");
+                System.out.println("Word was: " + word);
+                scanner.close();
+                return;
+            }
+        }
+
+        // lose
+        System.out.println(getHangmanArt(6));
+        System.out.println("GAME OVER");
+        System.out.println("Word was: " + word);
+
+        scanner.close();
+    }
+
+    static String getHangmanArt(int wrong) {
+
+    switch (wrong) {
+
+        case 0:
+            return "";
+
+        case 1:
+            return "  o";
+
+        case 2:
+            return "  o\n  |";
+
+        case 3:
+            return "  o\n /|";
+
+        case 4:
+            return "  o\n /|\\";
+
+        case 5:
+            return "  o\n /|\\\n /";
+
+        case 6:
+            return "  o\n /|\\\n / \\";
+
+        default:
+            return "";
+    }
+}
+}
